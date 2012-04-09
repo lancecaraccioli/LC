@@ -49,7 +49,7 @@ $emailFrom = '';
 Zend_Mail::setDefaultTransport(new Zend_Mail_Transport_Smtp($smtpHost));
 $mailer = new Zend_Mail();
 $mailer->addTo($emailTo, 'Receiver Name');
-$mailer->setFrom($emialFrom, 'Sender Name');
+$mailer->setFrom($emailFrom, 'Sender Name');
 $adapter->setMailer($mailer);
 $debugger->setInspector($adapter);
 $debugger->dump($data);
