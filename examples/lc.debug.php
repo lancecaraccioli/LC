@@ -3,51 +3,43 @@ ini_set('include_path', implode(PATH_SEPARATOR, array(
     get_include_path(),
     realpath(__DIR__ . '/../library/'),
 )));
-use LC\Debug;
-use LC\Debug\Writer\Html;
-use LC\Debug\Writer\Chrome;
-use LC\Debug\Writer\CommandLine;
-use LC\Debug\Writer\Email;
-
-require_once('LC/Debug.php');
-require_once('LC/Debug/Writer/Html.php');
-require_once('LC/Debug/Writer/CommandLine.php');
-require_once('LC/Debug/Writer/Email.php');
-require_once('LC/Debug/Writer/Chrome.php');
+use LC\Debug\Factory;
 
 /**
  * Because debugging is a development time type of functionality that is typically not very coupled to anything, set up a convient
  * global functions named "dump" and "kill" to wrap the debugger... base the adapter on a configuration option...
  * in an ideal world a dependecy injection container would be setup to handle the wiring.
  */
+$debuggerFactory = new Factory();
 
-$debugger = new Debug();
+/**
+ * demo data
+ */
 $data = array(
-    'foo' => 'bar',
-    'zoo' => 'jar',
-    'etc' => 'ect'
+    'foo' => 'foo value',
+    'bar' => 'bar value',
+    'baz' => 'baz value'
 );
 
 //chrome
-$writer = new Chrome();
-$debugger->setWriter($writer);
-$debugger->dump($data);
+$debugger = $debuggerFactory->buildDebuggerWithChromeWriter();
+$debugger->dump($data); //dump chrome dev tools console format
 
 //html
-$writer = new Html();
-$debugger->setWriter($writer);
-$debugger->dump($data);
+$debugger = $debuggerFactory->buildDebuggerWithHtmlWriter();
+$debugger->dump($data); //dump html output format
 
 //command line
-$writer = new CommandLine();
-$debugger->setWriter($writer);
-$debugger->dump($data);
+$debugger = $debuggerFactory->buildDebuggerWithCommandLineWriter();
+$debugger->dump($data);//dump command line output format
 
 
 /**
- * @todo implement basic email transport for proof of concept (was using Zend_Mail, but wanted to decouple)
+ * @todo implement basic email transport for proof of concept perhaps using as default transport (was using Zend_Mail, but wanted to decouple)
  *
- * $writer = new Email();
+ * $transport = new <class implementation of EmailTransport>
+ * $debugger = $debuggerFactory->buildDebuggerWithCommandLineWriter();
+ * $debugger->dump($data);//send email
  */
 
 

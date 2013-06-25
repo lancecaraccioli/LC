@@ -24,6 +24,12 @@ class Factory
     const chrome = 'chrome';
     const email = 'email';
 
+    public static function make($type)
+    {
+        $factory = new self();
+        return $factory->build($type);
+    }
+
     public function build($type)
     {
         $myReflection = new ReflectionClass($this);

@@ -1,17 +1,15 @@
 <?
 namespace LC\Debug;
 
-abstract class EmailTransport
+interface EmailTransport
 {
+    public function setBodyText();
 
-    public abstract function setBodyText();
+    public function setBodyHtml();
 
-    public abstract function setBodyHtml();
+    public function setSubject();
 
-    public abstract function setSubject();
+    public function setRecipient();
 
-    public abstract function setRecipient();
-
-    public abstract function send();
-
+    public function send();
 }
