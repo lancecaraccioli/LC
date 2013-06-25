@@ -1,11 +1,12 @@
 <?php
-    error_reporting(E_ALL);
-    ini_set('include_path', implode(PATH_SEPARATOR, array(
-        get_include_path(),
-        realpath(__DIR__ . '/../library/'),
-    )));
-    require_once('LC/Debug/Factory.php');
-    use LC\Debug\Factory as DebuggerFactory;
+error_reporting(E_ALL);
+ini_set('include_path', implode(PATH_SEPARATOR, array(
+    get_include_path(),
+    realpath(__DIR__ . '/../library/'),
+)));
+require_once('LC/Debug/Factory.php');
+use LC\Debug\Factory as DebuggerFactory;
+
 try {
     /**
      * Because debugging is a development time type of functionality that is typically not very coupled to anything, set up a convient
@@ -33,7 +34,7 @@ try {
 
     //command line
     $debugger = $debuggerFactory->buildDebuggerWithCommandLineWriter();
-    $debugger->dump($data);//dump command line output format
+    $debugger->dump($data); //dump command line output format
 
 
     /**
@@ -43,7 +44,7 @@ try {
      * $debugger = $debuggerFactory->buildDebuggerWithCommandLineWriter();
      * $debugger->dump($data);//send email
      */
-} catch (Exception $e){
+} catch (Exception $e) {
     die($e->getMessage());
 }
 

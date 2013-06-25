@@ -1,6 +1,9 @@
 <?php
 namespace LC\Debug;
 
+require_once('LC/Debug/Writer.php');
+use LC\Debug\Writer;
+
 abstract class AbstractWriter implements Writer
 {
     /**
