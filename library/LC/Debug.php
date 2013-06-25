@@ -1,4 +1,4 @@
-<?
+<?php
 namespace LC;
 use LC\Debug\AbstractWriter;
 use LC\Debug\Writer\Html;

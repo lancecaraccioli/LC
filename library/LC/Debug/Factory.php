@@ -1,4 +1,4 @@
-<?
+<?php
 namespace LC\Debug;
 
 require_once('LC/Debug.php');

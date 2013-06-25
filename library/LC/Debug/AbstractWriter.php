@@ -1,4 +1,4 @@
-<?
+<?php
 namespace LC\Debug;
 
 abstract class AbstractWriter implements Writer
