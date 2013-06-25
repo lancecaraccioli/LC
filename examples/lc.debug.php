@@ -1,27 +1,27 @@
 <?php
 ini_set('include_path', implode(PATH_SEPARATOR, array(
-	get_include_path(),
-	realpath(__DIR__.'/../library/'),
+    get_include_path(),
+    realpath(__DIR__ . '/../library/'),
 )));
 require_once('LC/Debug.php');
-require_once('LC/Debug/Inspector/Html.php');
-require_once('LC/Debug/Inspector/CommandLine.php');
-require_once('LC/Debug/Inspector/Email.php');
-require_once('LC/Debug/Inspector/Chrome.php');
+require_once('LC/Debug/Writer/Html.php');
+require_once('LC/Debug/Writer/CommandLine.php');
+require_once('LC/Debug/Writer/Email.php');
+require_once('LC/Debug/Writer/Chrome.php');
 require_once('Zend/Mail.php');
 require_once('Zend/Mail/Transport/Smtp.php');
 
 /**
  * Because debugging is a development time type of functionality that is typically not very coupled to anything, set up a convient
- * global functions named "dump" and "kill" to wrap the debugger... base the adapter on a configuration option... 
- * in an ideal world a dependecy injection container would be setup to handle the wiring. 
+ * global functions named "dump" and "kill" to wrap the debugger... base the adapter on a configuration option...
+ * in an ideal world a dependecy injection container would be setup to handle the wiring.
  */
 
 $debugger = new LC_Debug();
 $data = array(
-	'foo'=>'bar',
-	'zoo'=>'jar',
-	'etc'=>'ect'
+    'foo' => 'bar',
+    'zoo' => 'jar',
+    'etc' => 'ect'
 );
 
 //chrome
