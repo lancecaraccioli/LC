@@ -16,9 +16,4 @@ class Html extends AbstractWriter
         echo("</pre>");
     }
 
-    public function kill($data)
-    {
-        $this->dump($data);
-        die();
-    }
 }

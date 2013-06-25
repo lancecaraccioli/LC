@@ -1,11 +1,12 @@
 <?php
 namespace LC\Debug\Writer;
-use LC\Debug\AbstractWriter;
 
 require_once('LC/Debug/AbstractWriter.php');
+require_once(__DIR__ . '/../../ThirdParty/ChromePhp.php'); //this feels ugly...
 
-//I know... this is ugly...
-require_once(__DIR__ . '/../../ThirdParty/ChromePhp.php');
+use LC\Debug\AbstractWriter;
+use ThirdParty\ChromePhp;
+
 /**
  * This class is intended to dump data into the chrome debug console
  *

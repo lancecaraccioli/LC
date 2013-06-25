@@ -3,10 +3,10 @@ namespace LC\Debug;
 
 require_once('LC/Debug.php');
 require_once('LC/Debug/AbstractWriter.php');
-require_once('LC/Debug/AbstractWriter/Chrome.php');
-require_once('LC/Debug/AbstractWriter/Html.php');
-require_once('LC/Debug/AbstractWriter/CommandLine.php');
-require_once('LC/Debug/AbstractWriter/Email.php');
+require_once('LC/Debug/Writer/Chrome.php');
+require_once('LC/Debug/Writer/Html.php');
+require_once('LC/Debug/Writer/CommandLine.php');
+require_once('LC/Debug/Writer/Email.php');
 require_once('LC/Debug/EmailTransport.php');
 
 use LC\Debug;

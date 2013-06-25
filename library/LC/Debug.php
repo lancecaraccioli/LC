@@ -4,7 +4,6 @@ use LC\Debug\AbstractWriter;
 use LC\Debug\Writer\Html;
 
 require_once('LC/Debug/AbstractWriter.php');
-require_once('LC/Debug/AbstractWriter/Html.php');
 
 class Debug
 {

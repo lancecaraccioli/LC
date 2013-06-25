@@ -1,10 +1,11 @@
 <?php
 namespace LC\Debug\Writer;
+require_once('LC/Debug/AbstractWriter.php');
+require_once('LC/Debug/EmailTransport.php');
 use LC\Debug\AbstractWriter;
 use LC\Debug\EmailTransport;
 
-require_once('LC/Debug/AbstractWriter.php');
-require_once('Zend/Mail.php');
+
 /**
  * This class is intended to dump data into the command line console
  *
