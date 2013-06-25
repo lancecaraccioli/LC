@@ -10,10 +10,10 @@ use LC\Debug\Writer\CommandLine;
 use LC\Debug\Writer\Email;
 
 require_once('LC/Debug.php');
-require_once('LC/Debug/AbstractWriter/Html.php');
-require_once('LC/Debug/AbstractWriter/CommandLine.php');
-require_once('LC/Debug/AbstractWriter/Email.php');
-require_once('LC/Debug/AbstractWriter/Chrome.php');
+require_once('LC/Debug/Writer/Html.php');
+require_once('LC/Debug/Writer/CommandLine.php');
+require_once('LC/Debug/Writer/Email.php');
+require_once('LC/Debug/Writer/Chrome.php');
 
 /**
  * Because debugging is a development time type of functionality that is typically not very coupled to anything, set up a convient
