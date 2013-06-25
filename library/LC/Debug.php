@@ -1,10 +1,10 @@
 <?
 namespace LC;
-use LC\Debug\Writer;
+use LC\Debug\AbstractWriter;
 use LC\Debug\Writer\Html;
 
-require_once('LC/Debug/Writer.php');
-require_once('LC/Debug/Writer/Html.php');
+require_once('LC/Debug/AbstractWriter.php');
+require_once('LC/Debug/AbstractWriter/Html.php');
 
 class Debug
 {
@@ -14,7 +14,7 @@ class Debug
      */
     protected $_writer;
 
-    public function setWriter(Writer $inspector)
+    public function setWriter(AbstractWriter $inspector)
     {
         $this->_writer = $inspector;
     }
@@ -22,7 +22,7 @@ class Debug
     public function getWriter()
     {
         if (!$this->_writer) {
-            return new Html();
+            throw new Exception('Must set debug writer (use factory which does this for you)');
         }
         return $this->_writer;
     }
@@ -35,5 +35,23 @@ class Debug
     public function kill($data)
     {
         $this->getWriter()->kill($data);
+    }
+
+    /**
+     * PHP magic
+     * usage example:
+     *   $debug = new Debug(...);
+     *   $debug([$data[,$moreData[,...]]]);
+     *
+     * 1. An arbitrary number of parameters may be passed into the method and each will be included in the debugging out put
+     * 2. If no data is provided then the variables defined in the local scope get_defined_vars will be dumped
+     */
+    public function __invoke()
+    {
+        $data = func_get_args();
+        if (empty($data)) {
+            $data = get_defined_vars();
+        }
+        return $this->dump($data);
     }
 }

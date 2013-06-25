@@ -1,13 +1,13 @@
 <?php
 namespace LC\Debug\Writer;
-use LC\Debug\Writer;
+use LC\Debug\AbstractWriter;
 
-require_once('LC/Debug/Writer.php');
+require_once('LC/Debug/AbstractWriter.php');
 /**
  * This class is intended to dump data into html being returned to the browser
  *
  */
-class Html extends Writer
+class Html extends AbstractWriter
 {
     public function dump($data)
     {

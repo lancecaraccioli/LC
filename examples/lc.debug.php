@@ -3,13 +3,17 @@ ini_set('include_path', implode(PATH_SEPARATOR, array(
     get_include_path(),
     realpath(__DIR__ . '/../library/'),
 )));
+use LC\Debug;
+use LC\Debug\Writer\Html;
+use LC\Debug\Writer\Chrome;
+use LC\Debug\Writer\CommandLine;
+use LC\Debug\Writer\Email;
+
 require_once('LC/Debug.php');
-require_once('LC/Debug/Writer/Html.php');
-require_once('LC/Debug/Writer/CommandLine.php');
-require_once('LC/Debug/Writer/Email.php');
-require_once('LC/Debug/Writer/Chrome.php');
-require_once('Zend/Mail.php');
-require_once('Zend/Mail/Transport/Smtp.php');
+require_once('LC/Debug/AbstractWriter/Html.php');
+require_once('LC/Debug/AbstractWriter/CommandLine.php');
+require_once('LC/Debug/AbstractWriter/Email.php');
+require_once('LC/Debug/AbstractWriter/Chrome.php');
 
 /**
  * Because debugging is a development time type of functionality that is typically not very coupled to anything, set up a convient
@@ -17,7 +21,7 @@ require_once('Zend/Mail/Transport/Smtp.php');
  * in an ideal world a dependecy injection container would be setup to handle the wiring.
  */
 
-$debugger = new LC_Debug();
+$debugger = new Debug();
 $data = array(
     'foo' => 'bar',
     'zoo' => 'jar',
@@ -25,33 +29,27 @@ $data = array(
 );
 
 //chrome
-$adapter = new LC_Debug_Inspector_Chrome();
-$debugger->setInspector($adapter);
+$writer = new Chrome();
+$debugger->setWriter($writer);
 $debugger->dump($data);
 
 //html
-$adapter = new LC_Debug_Inspector_Html();
-$debugger->setInspector($adapter);
+$writer = new Html();
+$debugger->setWriter($writer);
 $debugger->dump($data);
 
 //command line
-$adapter = new LC_Debug_Inspector_CommandLine();
-$debugger->setInspector($adapter);
+$writer = new CommandLine();
+$debugger->setWriter($writer);
 $debugger->dump($data);
 
-//email
-$adapter = new LC_Debug_Inspector_Email();
-//why not have a setTransport on Zend_Mail ideally one would extend Zend_Mail to add this, or submit an upgrade to zend developer network?
-$smtpHost = '';
-$emailTo = '';
-$emailFrom = '';
-//ugg
-Zend_Mail::setDefaultTransport(new Zend_Mail_Transport_Smtp($smtpHost));
-$mailer = new Zend_Mail();
-$mailer->addTo($emailTo, 'Receiver Name');
-$mailer->setFrom($emailFrom, 'Sender Name');
-$adapter->setMailer($mailer);
-$debugger->setInspector($adapter);
-$debugger->dump($data);
+
+/**
+ * @todo implement basic email transport for proof of concept (was using Zend_Mail, but wanted to decouple)
+ *
+ * $writer = new Email();
+ */
+
+
 
 

@@ -1,7 +1,7 @@
 <?
 namespace LC\Debug;
 
-interface Writer
+abstract class AbstractWriter implements Writer
 {
     /**
      * Dump the contents of the source data into a sustable format and continue execution of script
@@ -10,7 +10,7 @@ interface Writer
      *
      * @param mixed $data is the source data that should be inspected by the inspector
      */
-    public function dump($data);
+    abstract public function dump($data);
 
 
     /**
@@ -19,6 +19,10 @@ interface Writer
      * @see {link dump()}
      * @param mixed $data is the source data that should be inspected by the inspector
      */
-    public function kill($data);
+    public function kill($data)
+    {
+        $this->dump($data);
+        die();
+    }
 
 }

@@ -1,15 +1,15 @@
 <?php
 namespace LC\Debug\Writer;
-use LC\Debug\Writer;
+use LC\Debug\AbstractWriter;
 use LC\Debug\EmailTransport;
 
-require_once('LC/Debug/Writer.php');
+require_once('LC/Debug/AbstractWriter.php');
 require_once('Zend/Mail.php');
 /**
  * This class is intended to dump data into the command line console
  *
  */
-class Email extends Writer
+class Email extends AbstractWriter
 {
     protected $_mailer;
 
