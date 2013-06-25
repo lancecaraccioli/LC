@@ -4,13 +4,14 @@ ini_set('include_path', implode(PATH_SEPARATOR, array(
     realpath(__DIR__ . '/../library/'),
 )));
 require_once('LC/Debug/Factory.php');
-use LC\Debug\Factory;
+use LC\Debug\Factory as DebuggerFactory;
+
 /**
  * Because debugging is a development time type of functionality that is typically not very coupled to anything, set up a convient
  * global functions named "dump" and "kill" to wrap the debugger... base the adapter on a configuration option...
  * in an ideal world a dependecy injection container would be setup to handle the wiring.
  */
-$debuggerFactory = new Factory();
+$debuggerFactory = new DebuggerFactory();
 
 /**
  * demo data
