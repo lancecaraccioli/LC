@@ -1,21 +1,12 @@
 <?php
 namespace LC\Debug;
-
-require_once('LC/Debug.php');
-require_once('LC/Debug/AbstractWriter.php');
-require_once('LC/Debug/Writer/Chrome.php');
-require_once('LC/Debug/Writer/Html.php');
-require_once('LC/Debug/Writer/CommandLine.php');
-require_once('LC/Debug/Writer/Email.php');
-require_once('LC/Debug/EmailTransport.php');
-
 use LC\Debug;
 use LC\Debug\Writer;
-use LC\Debug\EmailTransport;
 use LC\Debug\Writer\Html;
 use LC\Debug\Writer\Chrome;
 use LC\Debug\Writer\CommandLine;
 use LC\Debug\Writer\Email;
+use LC\Email\Transport;
 use \ReflectionClass;
 
 
@@ -25,6 +16,18 @@ class Factory
     const commandLine = 'commandLine';
     const chrome = 'chrome';
     const email = 'email';
+
+    public static function makeIntelligently()
+    {
+        if (php_sapi_name() == 'cli') {
+            $type = self::commandLine;
+        } else if (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome')) {
+            $type = self::chrome;
+        } else {
+            $type = self::html;
+        }
+        return self::make($type);
+    }
 
     public static function make($type)
     {
@@ -37,10 +40,10 @@ class Factory
         $myReflection = new ReflectionClass($this);
         $myArguments = func_get_args();
         array_shift($myArguments); //remove "type" from argument list
-        $methodName = 'buildDebuggerWith' . ucfirst($type) . 'AbstractWriter';
+        $methodName = 'buildDebuggerWith' . ucfirst($type) . 'Writer';
         $myReflectionMethod = $myReflection->getMethod($methodName);
         if ($myReflectionMethod->isPublic()) {
-            $myReflectionMethod->invokeArgs($this, $myArguments);
+            return $myReflectionMethod->invokeArgs($this, $myArguments);
         }
     }
 
@@ -68,10 +71,10 @@ class Factory
         return $debugger;
     }
 
-    public function buildDebuggerWithEmailWriter(EmailTransport $transport)
+    public function buildDebuggerWithEmailWriter(Transport $transport)
     {
         $writer = new Email();
-        $writer->setMailer($transport);
+        $writer->setEmailTransport($transport);
         $debugger = new Debug();
         $debugger->setWriter($writer);
         return $debugger;

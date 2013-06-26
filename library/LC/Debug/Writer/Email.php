@@ -1,9 +1,7 @@
 <?php
 namespace LC\Debug\Writer;
-require_once('LC/Debug/AbstractWriter.php');
-require_once('LC/Debug/EmailTransport.php');
 use LC\Debug\AbstractWriter;
-use LC\Debug\EmailTransport;
+use LC\Email\Transport;
 
 
 /**
@@ -12,28 +10,33 @@ use LC\Debug\EmailTransport;
  */
 class Email extends AbstractWriter
 {
-    protected $_mailer;
+    protected $_emailTransport;
 
     public function dump($data)
     {
         $serializedData = print_r($data, true);
-        $this->getMailer()
+        $serverInfo = ($_SERVER['SERVER_NAME'] ? : $_SERVER['HOSTNAME']) . '[' . $_SERVER['SERVER_ADDR'] . ']';
+        $this->getEmailTransport()
             ->setBodyText($serializedData)
             ->setBodyHtml('<pre>' . $serializedData . '</pre>')
-            ->setSubject("Debugging Output sent from " . $_SERVER['SERVER_ADDR'] . " at " . date('Y-m-d H:i:s'))
+            ->setSubject('Debugging Output sent from ' . $serverInfo . ' at ' . date('Y-m-d H:i:s'))
             ->send();
     }
 
-    public function getMailer()
+    /**
+     * @return Transport
+     * @throws Exception
+     */
+    public function getEmailTransport()
     {
-        if (!$this->_mailer) {
-            throw new Exception("You must first specify an EmailTransport object to handle sending the email.");
+        if (!$this->_emailTransport) {
+            throw new Exception("You must first specify an LC\\Email\\Transport object to handle sending the email.");
         }
-        return $this->_mailer;
+        return $this->_emailTransport;
     }
 
-    public function setMailer(EmailTransport $mailer)
+    public function setEmailTransport(Transport $emailTransport)
     {
-        $this->_mailer = $mailer;
+        $this->_emailTransport = $emailTransport;
     }
 }

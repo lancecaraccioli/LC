@@ -1,17 +1,22 @@
 <?php
-error_reporting(E_ALL);
-ini_set('include_path', implode(PATH_SEPARATOR, array(
-    get_include_path(),
-    realpath(__DIR__ . '/../library/'),
-)));
-require_once('LC/Debug/Factory.php');
+//setup include path
+$libraryPath = realpath(__DIR__ . '/../library');
+set_include_path(get_include_path() . PATH_SEPARATOR . $libraryPath);
+
+//setup namespace auto loader
+spl_autoload_register(function ($class) {
+    $fileName = str_replace('\\', '/', $class) . '.php';
+    require_once($fileName);
+});
+
 use LC\Debug\Factory as DebuggerFactory;
+use LC\Email\Transport\PhpMail;
 
 try {
     /**
-     * Because debugging is a development time type of functionality that is typically not very coupled to anything, set up a convient
-     * global functions named "dump" and "kill" to wrap the debugger... base the adapter on a configuration option...
-     * in an ideal world a dependecy injection container would be setup to handle the wiring.
+     * Because debugging is typically Development Time functionality that should be decoupled, set up should be convenient
+     * in an ideal world a dependency injection container would be setup to handle the wiring.  If that's not available
+     * the provided factory works fine enough.
      */
     $debuggerFactory = new DebuggerFactory();
 
@@ -23,28 +28,44 @@ try {
         'bar' => 'bar value',
         'baz' => 'baz value'
     );
+    /**
+     * Because each of the Debug Writers implement a common interface, changing the type of debug output can
+     * easily be based on a configuration option (see LC\Debug\Factory::build() and constants)
+     * The factory also has convenience methods for specific types of debuggers (used below)
+     */
+
 
     //chrome
+    //alternative generic method: LC\Debug\Factory::build(LC\Debug\Factory::chrome)
     $debugger = $debuggerFactory->buildDebuggerWithChromeWriter();
     $debugger->dump($data); //dump chrome dev tools console format
 
     //html
+    //alternative generic method: LC\Debug\Factory::build(LC\Debug\Factory::html)
     $debugger = $debuggerFactory->buildDebuggerWithHtmlWriter();
     $debugger->dump($data); //dump html output format
 
     //command line
+    //alternative generic method: LC\Debug\Factory::build(LC\Debug\Factory::commandLine)
     $debugger = $debuggerFactory->buildDebuggerWithCommandLineWriter();
     $debugger->dump($data); //dump command line output format
 
-
     /**
-     * @todo implement basic email transport for proof of concept perhaps using as default transport (was using Zend_Mail, but wanted to decouple)
-     *
-     * $transport = new <class implementation of EmailTransport>
-     * $debugger = $debuggerFactory->buildDebuggerWithCommandLineWriter();
-     * $debugger->dump($data);//send email
+     * email (minor configuration required...)
+     * 1.  a more specialized factory/DIC can setup a default transport for admin's etc in consuming applications
+     * 2.  OR a consuming application can create a specialized transport
+     * 3.  OR etc... lots of options for consumers.
      */
+    $mailTransport = new PhpMail();
+    $mailTransport->setRecipient('lance.caraccioli@gmail.com');
+    $mailTransport->setSender('lcaraccioli@elance.com');
+    //alternative generic method: LC\Debug\Factory::build(LC\Debug\Factory::email, $mailTransport)
+    $debugger = $debuggerFactory->buildDebuggerWithEmailWriter($mailTransport);
+    $debugger->dump($data); //sends an email
+
 } catch (Exception $e) {
+    echo get_include_path();
+    echo "\n";
     die($e->getMessage());
 }
 

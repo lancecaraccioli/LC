@@ -1,9 +1,6 @@
 <?php
 namespace LC;
 use LC\Debug\AbstractWriter;
-use LC\Debug\Writer\Html;
-
-require_once('LC/Debug/AbstractWriter.php');
 
 class Debug
 {
@@ -13,9 +10,9 @@ class Debug
      */
     protected $_writer;
 
-    public function setWriter(AbstractWriter $inspector)
+    public function setWriter(AbstractWriter $writer)
     {
-        $this->_writer = $inspector;
+        $this->_writer = $writer;
     }
 
     public function getWriter()
